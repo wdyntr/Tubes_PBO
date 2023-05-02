@@ -69,7 +69,7 @@ class CarRacing:
         self.white = (255, 255, 255)
         self.clock = pygame.time.Clock()
         self.game_display = None
-        self.program_icon = pygame.image.load('car_Icon.png')
+        self.program_icon = pygame.image.load('.\\img\\car_Icon.png')
         pygame.display.set_icon(self.program_icon)
 
         self.initialize()
