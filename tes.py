@@ -100,9 +100,9 @@ class CarRacing:
                 # print(event)
 
                 if (event.type == pygame.KEYDOWN):
-                    if (event.key == pygame.K_LEFT):
+                    if (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                         self.car._x -= 50
-                    if (event.key == pygame.K_RIGHT):
+                    if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                         self.car._x += 50
 
             self.game_display.fill(self.black)
