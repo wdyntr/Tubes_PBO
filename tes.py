@@ -2,25 +2,33 @@ import random
 from time import sleep
 
 import pygame
+from abc import ABC, abstractmethod
 
-
-class Vehicle:
+class Vehicle(ABC):
     def __init__(self, x, y, width, image):
         self._x = x
         self._y = y
         self._width = width
         self._image = image
 
+    @abstractmethod
     def draw(self, game_display):
-        game_display.blit(self._image, (self._x, self._y))
+        pass
 
+    @abstractmethod
     def get_rect(self):
-        return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
+        pass
 
 
 class Car(Vehicle):
     def __init__(self, x, y, width, image):
         super().__init__(x, y, width, image)
+
+    def draw(self, game_display):
+        game_display.blit(self._image, (self._x, self._y))
+
+    def get_rect(self):
+        return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
 
 
 class EnemyCar(Vehicle):
@@ -34,6 +42,12 @@ class EnemyCar(Vehicle):
         if self._y > 600:
             self._y = 0 - self.height
             self._x = random.randrange(310, 450)
+
+    def draw(self, game_display):
+        game_display.blit(self._image, (self._x, self._y))
+
+    def get_rect(self):
+        return pygame.Rect(self._x, self._y, self._width, self.height)
 
 class Background:
     def __init__(self, display_width):
