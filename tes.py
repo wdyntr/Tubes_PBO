@@ -1,7 +1,7 @@
 import random
 from time import sleep
-
 import pygame
+
 from abc import ABC, abstractmethod
 
 class Vehicle(ABC):
