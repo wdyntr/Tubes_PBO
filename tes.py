@@ -75,7 +75,6 @@ class CarRacing:
         self.initialize()
 
     def initialize(self):
-
         self.crashed = False
 
         self.car = Car(self.display_width * 0.45, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
