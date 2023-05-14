@@ -112,11 +112,11 @@ class StreetCarRacing:
 
             while len(self.additional_enemy_cars) < 2:
                 for i in range (5):
-                    x = random.randrange(60 * i, 900)
+                    x = random.randrange(60 * (i*2), 900)
                     y = -600 - (i+1) * self.enemy_car_spacing
                     self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 2)
                     self.additional_enemy_cars.append(self.enemy_car)
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 2)
+                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 0.2)
                     self.additional_enemy_cars.append(self.enemy_car)
 
             for self.enemy_car in self.additional_enemy_cars:
@@ -127,13 +127,11 @@ class StreetCarRacing:
                     self.crashed = True
                     self.display_message("Game Over !!!")
 
-            # self.enemy_car.draw(self.game_display)
-            # self.enemy_car.move_down()
-
-
-            if self.enemy_car._y > self.display_height:
+            for self.enemy_car in self.additional_enemy_cars:
                 self.enemy_car.move_down()
-                self.count += 1
+                if self.enemy_car._y > self.display_height:
+                    self.enemy_car.move_down()
+
 
             self.car.draw(self.game_display)
             self.highscore(self.bgImg.count)
