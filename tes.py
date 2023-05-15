@@ -154,8 +154,8 @@ class StreetCarRacing:
                 if self.car.get_rect().colliderect(self.enemy_car.get_rect()):
                     self.car.lose_life()
                     self.additional_enemy_cars.remove(self.enemy_car)
-                    self.show_ledakan(self.car._x, self.car._y)
                     self.crash_sound.play()
+                    self.show_ledakan(self.car._x, self.car._y)
 
                     if not self.car.is_alive():
                         self.crashed = True
@@ -175,14 +175,30 @@ class StreetCarRacing:
                 self.enemy_car.speed += 0.1
                 self.bgImg.bg_speed += 1
 
-            if self.car._y < self.enemy_car._y + self.enemy_car.height:
-                if self.car._x > self.enemy_car._x and self.car._x < self.enemy_car._x + self.enemy_car._width or self.car._x + self.car._width > self.enemy_car._x and self.car._x + self.car._width < self.enemy_car._x + self.enemy_car._width:
-                    self.crashed = True
-                    self.display_message("Game Over !!!")
+            # if self.car._y < self.enemy_car._y + self.enemy_car.height:
+            #     if self.car._x > self.enemy_car._x and self.car._x < self.enemy_car._x + self.enemy_car._width or self.car._x + self.car._width > self.enemy_car._x and self.car._x + self.car._width < self.enemy_car._x + self.enemy_car._width:
+            #         self.car.lose_life()
+            #         self.show_ledakan(self.car._x, self.car._y)
+            #         self.crash_sound.play()
+
+            #         if not self.car.is_alive():
+            #             self.crashed = True
+            #             self.display_message("Game Over !!!")
+            #             break
 
             if self.car._x < 50 or self.car._x > 920: 
-                self.crashed = True
-                self.display_message("Game Over !!!")
+                self.crash_sound.play()
+                self.show_ledakan(self.car._x, self.car._y)
+                if self.car._x < 50 :
+                    self.car._x += 50
+                else :
+                    self.car._x -= 50
+                self.car.lose_life()
+
+                if not self.car.is_alive():
+                    self.crashed = True
+                    self.display_message("Game Over !!!")
+                    break
 
             pygame.display.update()
             self.clock.tick(self.FPS)
