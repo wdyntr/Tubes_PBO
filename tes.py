@@ -66,7 +66,7 @@ class Background:
         self.bg_speed = 3
         self.count = 0
 
-class StreetCarRacing(pygame.sprite.Sprite):
+class StreetCarRacing:
     def __init__(self):
 
         pygame.init()
@@ -74,7 +74,6 @@ class StreetCarRacing(pygame.sprite.Sprite):
         self.display_height = 600
         self.black = (0, 0, 0)
         self.white = (255, 255, 255)
-        self.FPS = 60
         self.clock = pygame.time.Clock()
         self.additional_enemy_cars = []
         self.enemy_car_spacing = 150  # Jarak antara setiap EnemyCar
