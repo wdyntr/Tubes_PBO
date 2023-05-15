@@ -1,7 +1,7 @@
 import random
 from time import sleep
 import pygame
-
+from pygame import mixer
 from abc import ABC, abstractmethod
 
 class Vehicle(ABC):
@@ -68,6 +68,9 @@ class Background:
 
 class StreetCarRacing:
     def __init__(self):
+        
+        pygame.mixer.init()
+        self.crash_sound = pygame.mixer.Sound('.\\sound\\explosion.wav')
 
         pygame.init()
         self.display_width = 1000
@@ -76,6 +79,8 @@ class StreetCarRacing:
         self.white = (255, 255, 255)
         self.clock = pygame.time.Clock()
         self.additional_enemy_cars = []
+        mixer.music.load('.\\sound\\background.wav')
+        mixer.music.play(-1)
         self.ledakan = []
         self.FPS = 60
         self.enemy_car_spacing = 150  # Jarak antara setiap EnemyCar
@@ -150,6 +155,7 @@ class StreetCarRacing:
                     self.car.lose_life()
                     self.additional_enemy_cars.remove(self.enemy_car)
                     self.show_ledakan(self.car._x, self.car._y)
+                    self.crash_sound.play()
 
                     if not self.car.is_alive():
                         self.crashed = True
