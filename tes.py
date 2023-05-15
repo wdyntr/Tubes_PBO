@@ -69,10 +69,10 @@ class Background:
 class StreetCarRacing:
     def __init__(self):
         
+        pygame.init()
         pygame.mixer.init()
         self.crash_sound = pygame.mixer.Sound('.\\sound\\explosion.wav')
-
-        pygame.init()
+        self.crash_sound.set_volume(0.5)
         self.display_width = 1000
         self.display_height = 600
         self.black = (0, 0, 0)
