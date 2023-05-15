@@ -131,15 +131,16 @@ class StreetCarRacing:
             self.game_display.fill(self.black)
             self.back_ground_raod()
 
-            while len(self.additional_enemy_cars) < 6:
-                x = random.randrange(60, 900)
-                y = -600 - self.enemy_car_spacing
-                if len(self.additional_enemy_cars) % 2:
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
-                    self.additional_enemy_cars.append(self.enemy_car)
-                else:
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3)
-                    self.additional_enemy_cars.append(self.enemy_car)
+            while len(self.additional_enemy_cars) < 3:
+                for i in range(3):
+                    x = random.randrange(60, 900)
+                    y = -600 - self.enemy_car_spacing
+                    if len(self.additional_enemy_cars) % 2:
+                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
+                        self.additional_enemy_cars.append(self.enemy_car)
+                    else:
+                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3)
+                        self.additional_enemy_cars.append(self.enemy_car)
 
             for self.enemy_car in self.additional_enemy_cars:
                 self.enemy_car.draw(self.game_display)
