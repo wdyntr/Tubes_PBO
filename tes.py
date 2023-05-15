@@ -76,6 +76,8 @@ class StreetCarRacing:
         self.white = (255, 255, 255)
         self.clock = pygame.time.Clock()
         self.additional_enemy_cars = []
+        self.ledakan = []
+        self.FPS = 60
         self.enemy_car_spacing = 150  # Jarak antara setiap EnemyCar
         self.game_display = None
         self.program_icon = pygame.image.load('.\\img\\car_Icon.png')
@@ -91,6 +93,11 @@ class StreetCarRacing:
         # enemy_car
         # self.enemy_car = EnemyCar(random.randrange(80, 900), -600, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 5)
 
+        # ledakan
+        for i in range(7):
+            img = pygame.image.load(f'.\\img\\ledakan{i}.png')
+            self.ledakan.append(pygame.transform.scale(img, (100, 100)))
+
         # Background
         self.bgImg = Background(self.display_width)
 
@@ -98,6 +105,12 @@ class StreetCarRacing:
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
         pygame.display.set_caption('Street Car Racing')
         self.run_car()
+    
+    def show_ledakan(self, x, y):
+        for img in self.ledakan:
+            self.game_display.blit(img, (x, y))
+            pygame.display.update()
+            pygame.time.wait(50)
 
     def run_car(self):
 
@@ -113,18 +126,16 @@ class StreetCarRacing:
                         self.car._x -= 50
                     if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                         self.car._x += 50 
-                    
-                    self.car.draw(self.game_display)
-                        
+                                        
 
             self.game_display.fill(self.black)
             self.back_ground_raod()
 
-            while len(self.additional_enemy_cars) < 3:
-                x = random.randrange(60, 900)
+            while len(self.additional_enemy_cars) < 6:
+                x = random.randrange(60*2, 900)
                 y = -600 - self.enemy_car_spacing
                 if len(self.additional_enemy_cars) % 2:
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 5)
+                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
                     self.additional_enemy_cars.append(self.enemy_car)
                 else:
                     self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3)
@@ -137,6 +148,7 @@ class StreetCarRacing:
                 if self.car.get_rect().colliderect(self.enemy_car.get_rect()):
                     self.car.lose_life()
                     self.additional_enemy_cars.remove(self.enemy_car)
+                    self.show_ledakan(self.car._x, self.car._y)
 
                     if not self.car.is_alive():
                         self.crashed = True
@@ -166,7 +178,7 @@ class StreetCarRacing:
                 self.display_message("Game Over !!!")
 
             pygame.display.update()
-            self.clock.tick(60)
+            self.clock.tick(self.FPS)
 
     def display_message(self, msg):
         font = pygame.font.SysFont("comicsansms", 72, True)
@@ -174,7 +186,7 @@ class StreetCarRacing:
         self.game_display.blit(text, (500 - text.get_width() // 2, 300 - text.get_height() // 2))
        
         pygame.display.update()
-        self.clock.tick(60)
+        self.clock.tick(self.FPS)
         sleep(1)
         car_racing.initialize()
         car_racing.racing_window()
