@@ -86,7 +86,7 @@ class StreetCarRacing:
     def initialize(self):
         self.crashed = False
 
-        self.car = Car(self.display_width * 0.45, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
+        self.car = Car(self.display_width * 0.35, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
 
         # enemy_car
         # self.enemy_car = EnemyCar(random.randrange(80, 900), -600, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 5)
