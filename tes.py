@@ -80,7 +80,7 @@ class Item:
         return pygame.Rect(self.x, self.y, self.img_item.get_width(), self.img_item.get_height())
 
     def remove(self):
-        self.y = -1000
+        self.y = -1200
         self.x = random.randrange(70, 900)
 
 class StreetCarRacing:
