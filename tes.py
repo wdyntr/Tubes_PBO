@@ -80,7 +80,8 @@ class Item:
         return pygame.Rect(self.x, self.y, self.img_item.get_width(), self.img_item.get_height())
 
     def remove(self):
-        self.y = -600
+        self.y = -1000
+        self.x = random.randrange(70, 900)
 
 class StreetCarRacing:
     def __init__(self):
@@ -96,11 +97,11 @@ class StreetCarRacing:
         self.clock = pygame.time.Clock()
         self.tambah_enemy_cars = []
         mixer.music.load('.\\sound\\background.wav')
-        mixer.music.set_volume(1)
         mixer.music.play(-1)
         self.ledakan = []
+        self.heart = pygame.image.load('.\\img\\heart.png')
+        self.score = 0
         self.FPS = 60
-        self.enemy_car_spacing = 150  # Jarak antara setiap EnemyCar
         self.game_display = None
         self.program_icon = pygame.image.load('.\\img\\car_Icon.png')
         pygame.display.set_icon(self.program_icon)
@@ -112,9 +113,9 @@ class StreetCarRacing:
 
         self.car = Car(self.display_width * 0.35, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
 
-        # enemy_car
-        # self.enemy_car = EnemyCar(random.randrange(80, 900), -600, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 5)
+        # item bom yang dapat menghilangkan musuh. item ini akan muncul ketika darah user tersisa satu
         self.item = Item(pygame.image.load(".\\img\\bom.png"))
+
 
         # ledakan
         for i in range(8):
@@ -128,6 +129,15 @@ class StreetCarRacing:
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
         pygame.display.set_caption('Street Car Racing')
         self.run_car()
+
+    def heart_img(self):
+        heart_width = self.heart.get_width()
+        heart_height = self.heart.get_height()
+
+        for i in range(self.car.lives):
+            x = 850 + i * (heart_width)
+            y = 10
+            self.game_display.blit(self.heart, (x, y))
     
     def show_ledakan(self, x, y):
         for img in self.ledakan:
@@ -155,10 +165,10 @@ class StreetCarRacing:
             self.Background_road()
 
             while len(self.tambah_enemy_cars) < 2:
-                for i in range(2):
+                for i in range(4):
                     x = random.randrange(60, 900)
-                    y = -600 - self.enemy_car_spacing
-                    if len(self.tambah_enemy_cars) % 2:
+                    y = random.randrange(-600, 0)
+                    if i % 2:
                         self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
                         self.tambah_enemy_cars.append(self.enemy_car)
                     else:
@@ -186,8 +196,10 @@ class StreetCarRacing:
             #         self.enemy_car.move_down()
 
 
+            self.heart_img()
             self.car.draw(self.game_display)
-            self.show_score(self.bgImg.count) #?
+            self.score += 1
+            self.Show_score(self.score)
             self.bgImg.count += 1
             if (self.bgImg.count % 100 == 0):
                 self.enemy_car.speed += 0.1
@@ -203,6 +215,7 @@ class StreetCarRacing:
                     self.item.remove()   
                     for self.enemy_car in self.tambah_enemy_cars:
                         self.enemy_car._y = -600
+                        self.enemy_car._x = random.randrange(70, 900)
 
             if self.car._x < 50 or self.car._x > 920: 
                 self.crash_sound.play()
@@ -245,7 +258,7 @@ class StreetCarRacing:
         if self.bgImg.bg_y2 >= self.display_height:
             self.bgImg.bg_y2 = -600
 
-    def show_score(self, count):
+    def Show_score(self, count):
         font = pygame.font.SysFont("lucidaconsole", 20)
         text = font.render("Score : " + str(count), True, self.white)
         self.game_display.blit(text, (60, 0))
