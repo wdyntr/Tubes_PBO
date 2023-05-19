@@ -70,7 +70,6 @@ class Background:
         self.bg_y1 = 0 
         self.bg_y2 = -600 
         self.bg_speed = 3
-        self.count = 0
 
 #class item untuk heart dan bom
 class Item:
@@ -220,7 +219,7 @@ class StreetCarRacing:
             while len(self.tambah_enemy_cars) < 4:
                 i = len(self.tambah_enemy_cars)
                 x = random.randint(70, 900)
-                y = random.randint(-600, 0)
+                y = random.randint(-600 * 2, 0)
                 if i % 2 == 0:
                     self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 3)
                     self.tambah_enemy_cars.append(self.enemy_car)
@@ -248,9 +247,10 @@ class StreetCarRacing:
             self.car.draw(self.game_display)
             self.score += 1
             self.Show_score(self.score)
-            self.bgImg.count += 1
-            if (self.bgImg.count % 100 == 0):
-                self.enemy_car.speed += 0.3
+            if (self.score % 100 == 0):
+                for self.enemy_car in self.tambah_enemy_cars:
+                    self.enemy_car.speed += 1
+
                 self.bgImg.bg_speed += 1
 
             # jika nyawa player kurang dari 3 maka item heart akan muncul untuk menambah nyawa player
