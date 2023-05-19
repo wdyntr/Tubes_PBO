@@ -23,7 +23,7 @@ class Vehicle(ABC):
 class Car(Vehicle):
     def __init__(self, x, y, width, image):
         super().__init__(x, y, width, image)
-        self.lives = 3
+        self.heart = 3
 
     def draw(self, game_display):
         game_display.blit(self._image, (self._x, self._y))
@@ -32,10 +32,13 @@ class Car(Vehicle):
         return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
 
     def lose_life(self):
-        self.lives -= 1
+        self.heart -= 1
+    
+    def life_increases(self):
+        self.heart += 1
         
     def is_alive(self):
-        return self.lives > 0
+        return self.heart > 0
 
 
 class EnemyCar(Vehicle):
@@ -80,7 +83,7 @@ class Item:
         return pygame.Rect(self.x, self.y, self.img_item.get_width(), self.img_item.get_height())
 
     def remove(self):
-        self.y = -1200
+        self.y = -2000
         self.x = random.randrange(70, 900)
 
 class StreetCarRacing:
@@ -114,7 +117,10 @@ class StreetCarRacing:
         self.car = Car(self.display_width * 0.35, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
 
         # item bom yang dapat menghilangkan musuh. item ini akan muncul ketika darah user tersisa satu
-        self.item = Item(pygame.image.load(".\\img\\bom.png"))
+        self.item_bom = Item(pygame.image.load(".\\img\\bom.png"))
+
+        # item heart yang akan muncuk ketika nyawa player kurang dari 3
+        self.item_heart = Item(pygame.image.load(".\\img\\heart.png"))
 
 
         # ledakan
@@ -134,7 +140,7 @@ class StreetCarRacing:
         heart_width = self.heart.get_width()
         heart_height = self.heart.get_height()
 
-        for i in range(self.car.lives):
+        for i in range(self.car.heart):
             x = 850 + i * (heart_width)
             y = 10
             self.game_display.blit(self.heart, (x, y))
@@ -164,7 +170,7 @@ class StreetCarRacing:
             self.game_display.fill(self.black)
             self.Background_road()
 
-            while len(self.tambah_enemy_cars) < 2:
+            while len(self.tambah_enemy_cars) < 4:
                 for i in range(4):
                     x = random.randrange(60, 900)
                     y = random.randrange(-600, 0)
@@ -172,7 +178,7 @@ class StreetCarRacing:
                         self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
                         self.tambah_enemy_cars.append(self.enemy_car)
                     else:
-                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3) #penyebab overlap enemycar
+                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3) 
                         self.tambah_enemy_cars.append(self.enemy_car)
 
             for self.enemy_car in self.tambah_enemy_cars:
@@ -205,17 +211,26 @@ class StreetCarRacing:
                 self.enemy_car.speed += 0.1
                 self.bgImg.bg_speed += 1
 
-            # item bom yang akan muncul ketika darah mobil tersisa satu
-            if (self.car.lives == 1):
-                self.item.move_down(self.game_display)
-                if self.item.y > 600:
-                    self.item.remove()
+            if self.car.heart < 3:
+                self.item_heart.move_down(self.game_display)
+                if self.item_heart.y > 600:
+                    self.item_heart.remove()
 
-                if self.item.get_Rect().colliderect(self.car.get_rect()):
-                    self.item.remove()   
-                    for self.enemy_car in self.tambah_enemy_cars:
-                        self.enemy_car._y = -600
-                        self.enemy_car._x = random.randrange(70, 900)
+                if self.item_heart.get_Rect().colliderect(self.car.get_rect()):
+                    self.item_heart.remove()
+                    self.car.life_increases()
+
+                # item bom yang akan muncul ketika darah mobil tersisa satu
+                if (self.car.heart == 1):
+                    self.item_bom.move_down(self.game_display)
+                    if self.item_bom.y > 600:
+                        self.item_bom.remove()
+
+                    if self.item_bom.get_Rect().colliderect(self.car.get_rect()):
+                        self.item_bom.remove()   
+                        for self.enemy_car in self.tambah_enemy_cars:
+                            self.enemy_car._y = -600
+                            self.enemy_car._x = random.randrange(70, 900)
 
             if self.car._x < 50 or self.car._x > 920: 
                 self.crash_sound.play()
