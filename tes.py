@@ -1,10 +1,11 @@
 import random
-from time import sleep #memberi jeda program dalam jangka waktu tertentu
+from time import sleep
 import pygame
-from pygame import mixer #memberikan suara
+from pygame import mixer
 from abc import ABC, abstractmethod
 from button import Button
 
+#parent class dari class car & enemycar
 class Vehicle(ABC):
     def __init__(self, x, y, width, image):
         self._x = x
@@ -20,7 +21,7 @@ class Vehicle(ABC):
     def get_rect(self):
         pass
 
-
+#class objek mobil pemain
 class Car(Vehicle):
     def __init__(self, x, y, width, image):
         super().__init__(x, y, width, image)
@@ -41,7 +42,7 @@ class Car(Vehicle):
     def is_alive(self):
         return self.heart > 0
 
-
+#class objek mobil musuh
 class EnemyCar(Vehicle):
     def __init__(self, x, y, width, height, image, speed):
         super().__init__(x, y, width, image)
@@ -60,6 +61,7 @@ class EnemyCar(Vehicle):
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self.height)
 
+#class background
 class Background:
     def __init__(self, display_width):
         self.backgroundImg = pygame.image.load(".\\img\\back2.jpg")
@@ -70,6 +72,7 @@ class Background:
         self.bg_speed = 3
         self.count = 0
 
+#class item untuk heart dan bom
 class Item:
     def __init__(self, image):
         self.x = random.randrange(70, 900)
@@ -87,6 +90,7 @@ class Item:
         self.y = -1200
         self.x = random.randrange(70, 900)
 
+#class proses utama permainan
 class StreetCarRacing:
     def __init__(self):
         
@@ -134,10 +138,7 @@ class StreetCarRacing:
         # Background
         self.bgImg = Background(self.display_width)
 
-    # def racing_window(self):
-    #     self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
-    #     self.running()
-
+    #method untuk nyawa mobil pemain
     def heart_img(self):
         self.heart_width = self.heart.get_width()
         self.heart_height = self.heart.get_height()
@@ -147,26 +148,29 @@ class StreetCarRacing:
             y = 0
             self.game_display.blit(self.heart, (x, y))
     
+    #method untuk menampilkan rentetan proses ledakan
     def show_ledakan(self, x, y):
         for img in self.ledakan:
             self.game_display.blit(img, (x, y))
             pygame.display.update()
             pygame.time.wait(50)
 
-    def get_font(self, size): # Returns Press-Start-2P in the desired size
+    #method untuk memperoleh font yang disiapkan
+    def get_font(self, size):
         return pygame.font.Font(".\\font\\ethnocentric rg.otf", size)
 
+    #method untuk looping tampilan menu game
     def main_menu(self):
         while True:
             self.SCREEN.blit(self.BG, (0, 0))
             self.MENU_MOUSE_POS = pygame.mouse.get_pos()
+
             self.MENU_TEXT = self.get_font(70).render("MAIN MENU", True, "#b68f40")
             self.MENU_RECT = self.MENU_TEXT.get_rect(center = (500, 50))
             
             #top score
-            # if self.score != 0:
-            #     self.SCORE_TEXT = self.get_font(50).render("SCORE: " + str(self.score), True, "#b68f40")
-            #     self.SCORE_RECT = self.SCORE_TEXT.get_rect(center = (500, 250))
+            self.SCORE_TEXT = self.get_font(30).render("SCORE: " + str(self.score), True, "black")
+            self.SCORE_RECT = self.SCORE_TEXT.get_rect(center = (500, 200))
 
             self.PLAY_BUTTON = Button(image=pygame.image.load(".\\img\\Menu Rect.png"), pos = (500, 300), 
                                 text_input="PLAY", font = self.get_font(50), base_color="#d7fcd4", hovering_color="white")
@@ -174,6 +178,8 @@ class StreetCarRacing:
                                 text_input="QUIT", font = self.get_font(50), base_color="#d7fcd4", hovering_color="white")
 
             self.SCREEN.blit(self.MENU_TEXT, self.MENU_RECT)
+            if self.score != 0:
+                self.SCREEN.blit(self.SCORE_TEXT, self.SCORE_RECT)
 
             for button in [self.PLAY_BUTTON, self.QUIT_BUTTON]:
                 button.changeColor(self.MENU_MOUSE_POS)
@@ -191,6 +197,7 @@ class StreetCarRacing:
 
             pygame.display.update()
 
+    #method untuk looping tampilan permainan utama
     def running(self):
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
 
@@ -208,7 +215,7 @@ class StreetCarRacing:
                     if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                         self.car._x += 50 
 
-            # jumlah enemt Car
+            # jumlah enemy Car
             while len(self.tambah_enemy_cars) < 4:
                 i = len(self.tambah_enemy_cars)
                 x = random.randint(60, self.display_width - 49)
@@ -286,24 +293,22 @@ class StreetCarRacing:
             pygame.display.update()
             self.clock.tick(self.FPS)
 
+    #method untuk menampilkan pesan 
     def show_message(self, msg):
-        font = pygame.font.SysFont("comicsansms", 72, True)
-        text = font.render(msg, True, (255, 255, 255))
-        self.game_display.blit(text, (500 - text.get_width() // 2, 300 - text.get_height() // 2))
+        self.__font_mess = pygame.font.SysFont("comicsansms", 72, True)
+        self.__text_mess = self.__font_mess.render(msg, True, "#b68f40")
+        self.game_display.blit(self.__text_mess, (500 - self.__text_mess.get_width() // 2, 300 - self.__text_mess.get_height() // 2))
        
         pygame.display.update()
         self.clock.tick(self.FPS)
 
         #pengkondisian agar kembali ke menu
         if self.crashed:
-            self.crashed = False
+            self.inisialisasi()
             sleep(1)
             self.main_menu()
 
-        #Mengulang kembali permainan
-        # self.inisialisasi()
-        # self.racing_window()
-
+    #method background
     def Background_road(self):
         self.game_display.blit(self.bgImg.backgroundImg, (self.bgImg.bg_x1, self.bgImg.bg_y1))
         self.game_display.blit(self.bgImg.backgroundImg, (self.bgImg.bg_x2, self.bgImg.bg_y2))
@@ -317,11 +322,13 @@ class StreetCarRacing:
         if self.bgImg.bg_y2 >= self.display_height:
             self.bgImg.bg_y2 = -600
 
+    #method untuk menampilkan score
     def Show_score(self, count):
-        font = pygame.font.SysFont("lucidaconsole", 20)
-        text = font.render("Score : " + str(count), True, "white")
-        self.game_display.blit(text, (60, 0))
+        self.__font_score = pygame.font.SysFont("lucidaconsole", 20)
+        self.__text_score = self.__font_score.render("Score : " + str(count), True, "white")
+        self.game_display.blit(self.__text_score, (60, 0))
 
+#baris program untuk membuat objek class utama dan menjalankan looping
 if __name__ == '__main__':
     car_racing = StreetCarRacing()
     car_racing.main_menu()
