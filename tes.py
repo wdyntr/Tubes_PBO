@@ -90,7 +90,6 @@ class Item:
 class StreetCarRacing:
     def __init__(self):
         
-        pygame.init() #Double?
         pygame.mixer.init()
         self.SCREEN = pygame.display.set_mode((1000, 600))
         self.BG = pygame.image.load(".\\img\\Background.jpg") #
@@ -136,7 +135,7 @@ class StreetCarRacing:
 
     # def racing_window(self):
     #     self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
-    #     self.run_car()
+    #     self.running()
 
     def heart_img(self):
         self.heart_width = self.heart.get_width()
@@ -184,17 +183,15 @@ class StreetCarRacing:
                     pygame.quit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.PLAY_BUTTON.checkForInput(self.MENU_MOUSE_POS):
-                        self.run_car()
+                        self.running()
                         pygame.quit() #agar tidak ada double window
                     if self.QUIT_BUTTON.checkForInput(self.MENU_MOUSE_POS):
                         pygame.quit()
 
             pygame.display.update()
 
-    def run_car(self):
+    def running(self):
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
-        self.car.heart = 3
-        self.score = 0
 
         while not self.crashed:
             self.game_display.fill("black")
@@ -235,7 +232,7 @@ class StreetCarRacing:
 
                     if not self.car.is_alive():
                         self.crashed = True
-                        self.display_message("Game Over !!!")
+                        self.show_message("Game Over !!!")
                         break
 
             self.heart_img()
@@ -281,13 +278,13 @@ class StreetCarRacing:
 
                 if not self.car.is_alive():
                     self.crashed = True
-                    self.display_message("Game Over !!!")
+                    self.show_message("Game Over !!!")
                     break
 
             pygame.display.update()
             self.clock.tick(self.FPS)
 
-    def display_message(self, msg):
+    def show_message(self, msg):
         font = pygame.font.SysFont("comicsansms", 72, True)
         text = font.render(msg, True, (255, 255, 255))
         self.game_display.blit(text, (500 - text.get_width() // 2, 300 - text.get_height() // 2))
