@@ -104,6 +104,8 @@ class StreetCarRacing:
         mixer.music.play(-1)
         self.ledakan = []
         self.heart = pygame.image.load('.\\img\\heart.png')
+        self.bom_sound = pygame.mixer.Sound('.\\sound\\bom.mp3')
+        self.bom_sound.set_volume(0.5)
         self.score = 0
         self.FPS = 60
         self.game_display = None
@@ -260,7 +262,8 @@ class StreetCarRacing:
                     self.item.remove()
 
                 if self.item.get_Rect().colliderect(self.car.get_rect()):
-                    self.item.remove()   
+                    self.item.remove()
+                    self.bom_sound.play()
                     for self.enemy_car in self.tambah_enemy_cars:
                         self.enemy_car._y = -600
                         self.enemy_car._x = random.randrange(70, 900)
