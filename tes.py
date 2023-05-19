@@ -93,7 +93,7 @@ class StreetCarRacing:
         pygame.init() #Double?
         pygame.mixer.init()
         self.SCREEN = pygame.display.set_mode((1000, 600))
-        self.BG = pygame.image.load(".\\img\\Background.png") #
+        self.BG = pygame.image.load(".\\img\\Background.jpg") #
         self.crash_sound = pygame.mixer.Sound('.\\sound\\explosion.wav')
         self.crash_sound.set_volume(0.5)
         self.display_width = 1000
