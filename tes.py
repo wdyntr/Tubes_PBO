@@ -199,6 +199,7 @@ class StreetCarRacing:
 
     #method untuk looping tampilan permainan utama
     def running(self):
+        self.score = 0
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
 
         while not self.crashed:
@@ -218,7 +219,7 @@ class StreetCarRacing:
             # jumlah enemy Car
             while len(self.tambah_enemy_cars) < 4:
                 i = len(self.tambah_enemy_cars)
-                x = random.randint(60, self.display_width - 49)
+                x = random.randint(70, 900)
                 y = random.randint(-600, 0)
                 if i % 2 == 0:
                     self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 3)
@@ -249,7 +250,7 @@ class StreetCarRacing:
             self.Show_score(self.score)
             self.bgImg.count += 1
             if (self.bgImg.count % 100 == 0):
-                self.enemy_car.speed += 0.1
+                self.enemy_car.speed += 0.3
                 self.bgImg.bg_speed += 1
 
             # jika nyawa player kurang dari 3 maka item heart akan muncul untuk menambah nyawa player
