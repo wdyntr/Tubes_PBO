@@ -1,5 +1,11 @@
 # Street Car Racing
 
+# Deskripsi Projek
+Permainan ini merupakan permainan tentang seorang pengemudi yang kebut-kebutan dijalan. Permainan ini terdapat dua item yaitu bom (untuk menghilangkan musuh) dan heart (untuk menambah nyawa). Permainan ini bertujuan untuk mendapatkan score dengan menghidar dari mobil lawan yang berdatangan. Player memiliki 3 nyawa dan akan berkurang jika terjadi tabrakan dengan mobil lawan atau keluar jalur.
+
+# Cara Bermain
+Cara memainkan game ini adalah dengan menekan tombol panah kanan (untuk ke kanan) dan kiri (untuk ke kiri) atau dapat juga menggunakan tombol a (untuk ke kiri) dan d (untuk ke kanan).
+
 # Kontributor
 | Nama | NIM | Posisi | GitHub |
 |------|-----|--------|--------|
