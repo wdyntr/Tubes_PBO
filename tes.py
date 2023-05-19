@@ -193,8 +193,6 @@ class StreetCarRacing:
 
     def running(self):
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
-        self.car.heart = 3
-        self.score = 0
 
         while not self.crashed:
             self.game_display.fill("black")
