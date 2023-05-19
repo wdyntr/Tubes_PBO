@@ -173,10 +173,10 @@ class StreetCarRacing:
             self.Background_road()
 
             # jumlah enemt Car
-            while len(self.tambah_enemy_cars) < 5:
+            while len(self.tambah_enemy_cars) < 4:
                 i = len(self.tambah_enemy_cars)
-                x = random.randrange(60, 900)
-                y = random.randrange(-600, 0)
+                x = random.randint(60, self.display_width - 49)
+                y = random.randint(-600, 0)
                 if i % 2 == 0:
                     self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 3)
                     self.tambah_enemy_cars.append(self.enemy_car)
