@@ -51,7 +51,7 @@ class EnemyCar(Vehicle):
     def move_down(self):
         self._y += self.speed
         if self._y > 600:
-            self._y = 0 - self.height 
+            self._y = 0 - self.height #?
             self._x = random.randrange(70, 900)
 
     def draw(self, game_display):
@@ -63,10 +63,10 @@ class EnemyCar(Vehicle):
 class Background:
     def __init__(self, display_width):
         self.backgroundImg = pygame.image.load(".\\img\\back2.jpg")
-        self.bg_x1 = (display_width / 2) - (1000 / 2) 
-        self.bg_x2 = (display_width / 2) - (1000 / 2) 
-        self.bg_y1 = 0 
-        self.bg_y2 = -600 
+        self.bg_x1 = (display_width / 2) - (1000 / 2) #?
+        self.bg_x2 = (display_width / 2) - (1000 / 2) #?
+        self.bg_y1 = 0 #?
+        self.bg_y2 = -600 #?
         self.bg_speed = 3
         self.count = 0
 
@@ -90,6 +90,7 @@ class Item:
 class StreetCarRacing:
     def __init__(self):
         
+        pygame.init()
         pygame.mixer.init()
         self.SCREEN = pygame.display.set_mode((1000, 600))
         self.BG = pygame.image.load(".\\img\\Background.jpg") #
@@ -192,6 +193,8 @@ class StreetCarRacing:
 
     def running(self):
         self.game_display = pygame.display.set_mode((self.display_width, self.display_height))
+        self.car.heart = 3
+        self.score = 0
 
         while not self.crashed:
             self.game_display.fill("black")
@@ -315,7 +318,6 @@ class StreetCarRacing:
         if self.bgImg.bg_y2 >= self.display_height:
             self.bgImg.bg_y2 = -600
 
-    # score dihitung berdasarkan iterasi while pada methode running
     def Show_score(self, count):
         font = pygame.font.SysFont("lucidaconsole", 20)
         text = font.render("Score : " + str(count), True, "white")
