@@ -51,7 +51,7 @@ class EnemyCar(Vehicle):
     def move_down(self):
         self._y += self.speed
         if self._y > 600:
-            self._y = 0 - self.height #?
+            self._y = 0 - self.height 
             self._x = random.randrange(70, 900)
 
     def draw(self, game_display):
@@ -63,10 +63,10 @@ class EnemyCar(Vehicle):
 class Background:
     def __init__(self, display_width):
         self.backgroundImg = pygame.image.load(".\\img\\back2.jpg")
-        self.bg_x1 = (display_width / 2) - (1000 / 2) #?
-        self.bg_x2 = (display_width / 2) - (1000 / 2) #?
-        self.bg_y1 = 0 #?
-        self.bg_y2 = -600 #?
+        self.bg_x1 = (display_width / 2) - (1000 / 2) 
+        self.bg_x2 = (display_width / 2) - (1000 / 2) 
+        self.bg_y1 = 0 
+        self.bg_y2 = -600 
         self.bg_speed = 3
         self.count = 0
 
@@ -210,17 +210,19 @@ class StreetCarRacing:
                     if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
                         self.car._x += 50 
 
-            while len(self.tambah_enemy_cars) < 2:
-                for i in range(4):
-                    x = random.randrange(60, 900)
-                    y = random.randrange(-600, 0)
-                    if i % 2:
-                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
-                        self.tambah_enemy_cars.append(self.enemy_car)
-                    else:
-                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3)
-                        self.tambah_enemy_cars.append(self.enemy_car)
+            # jumlah enemt Car
+            while len(self.tambah_enemy_cars) < 4:
+                i = len(self.tambah_enemy_cars)
+                x = random.randint(60, self.display_width - 49)
+                y = random.randint(-600, 0)
+                if i % 2 == 0:
+                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 3)
+                    self.tambah_enemy_cars.append(self.enemy_car)
+                else:
+                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3) 
+                    self.tambah_enemy_cars.append(self.enemy_car)
 
+            # menampilakn enemycar ke layar
             for self.enemy_car in self.tambah_enemy_cars:
                 self.enemy_car.draw(self.game_display)
                 self.enemy_car.move_down()
@@ -316,6 +318,7 @@ class StreetCarRacing:
         if self.bgImg.bg_y2 >= self.display_height:
             self.bgImg.bg_y2 = -600
 
+    # score dihitung berdasarkan iterasi while pada methode running
     def Show_score(self, count):
         font = pygame.font.SysFont("lucidaconsole", 20)
         text = font.render("Score : " + str(count), True, "white")
