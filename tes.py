@@ -51,7 +51,7 @@ class EnemyCar(Vehicle):
     def move_down(self):
         self._y += self.speed
         if self._y > 600:
-            self._y = 0 - self.height #?
+            self._y = 0 - self.height 
             self._x = random.randrange(70, 900)
 
     def draw(self, game_display):
@@ -63,10 +63,10 @@ class EnemyCar(Vehicle):
 class Background:
     def __init__(self, display_width):
         self.backgroundImg = pygame.image.load(".\\img\\back2.jpg")
-        self.bg_x1 = (display_width / 2) - (1000 / 2) #?
-        self.bg_x2 = (display_width / 2) - (1000 / 2) #?
-        self.bg_y1 = 0 #?
-        self.bg_y2 = -600 #?
+        self.bg_x1 = (display_width / 2) - (1000 / 2) 
+        self.bg_x2 = (display_width / 2) - (1000 / 2) 
+        self.bg_y1 = 0 
+        self.bg_y2 = -600 
         self.bg_speed = 3
         self.count = 0
 
@@ -268,6 +268,7 @@ class StreetCarRacing:
                         self.enemy_car._y = -600
                         self.enemy_car._x = random.randrange(70, 900)
 
+            # jika mobil keluar jalur maka nyawa player akan berkurang
             if self.car._x < 50 or self.car._x > 920: 
                 self.crash_sound.play()
                 self.show_ledakan(self.car._x, self.car._y)
