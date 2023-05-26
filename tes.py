@@ -16,9 +16,11 @@ class Vehicle(ABC):
         #
 
     #abstraksi
+    #enkapsulasi
     @abstractmethod
     def draw(self, game_display):
         pass
+    #
 
     @abstractmethod
     def get_rect(self):
@@ -32,7 +34,7 @@ class Car(Vehicle):
         self.heart = 3
 
     def draw(self, game_display):
-        game_display.blit(self._image, (self._x, self._y)) #?
+        game_display.blit(self._image, (self._x, self._y))
 
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
@@ -62,7 +64,7 @@ class EnemyCar(Vehicle):
         #
 
     def draw(self, game_display):
-        game_display.blit(self._image, (self._x, self._y)) #?
+        game_display.blit(self._image, (self._x, self._y))
 
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self.height)
@@ -78,17 +80,19 @@ class Background:
         self.bg_speed = 3
 
 #class item untuk heart dan bom
-class Item:
+class Item(Vehicle):
     def __init__(self, image):
         self.x = random.randrange(70, 900)
         self.y = -400
         self.img_item = image
     
     def move_down(self, game_display):
-        self.y += 1 #item
+        self.y += 1
+        self.draw(game_display)
+    def draw(self, game_display):
         game_display.blit(self.img_item, (self.x, self.y))
 
-    def get_Rect(self):
+    def get_rect(self):
         return pygame.Rect(self.x, self.y, self.img_item.get_width(), self.img_item.get_height())
 
     def remove(self):
@@ -276,7 +280,7 @@ class StreetCarRacing:
                 if self.item_heart.y > 600:
                     self.item_heart.remove()
 
-                if self.item_heart.get_Rect().colliderect(self.car.get_rect()):
+                if self.item_heart.get_rect().colliderect(self.car.get_rect()):
                     self.item_heart.remove()
                     self.car.life_increases()
 
@@ -286,7 +290,7 @@ class StreetCarRacing:
                 if self.item.y > 600:
                     self.item.remove()
 
-                if self.item.get_Rect().colliderect(self.car.get_rect()):
+                if self.item.get_rect().colliderect(self.car.get_rect()):
                     self.item.remove()
                     self.bom_sound.play()
                     for self.enemy_car in self.tambah_enemy_cars:
