@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from button import Button
 
 #parent class dari class car & enemycar
-class Vehicle(ABC):
+class Aset(ABC):
     def __init__(self, x, y, width, image):
         #enkapsulasi (protected)
         self._x = x
@@ -28,7 +28,7 @@ class Vehicle(ABC):
     #
 
 #class objek mobil pemain
-class Car(Vehicle):
+class Car(Aset):
     def __init__(self, x, y, width, image):
         super().__init__(x, y, width, image)
         self.heart = 3
@@ -39,17 +39,27 @@ class Car(Vehicle):
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
 
+    @property
     def lose_life(self):
-        self.heart -= 1
+        return self.heart
 
-    def life_increases(self):
-        self.heart += 1
+    @lose_life.setter
+    def lose_life(self, kurang):
+        self.heart -= kurang
+
+    @property
+    def life_increases(self, tambah):
+        return self.heart
+    
+    @life_increases.setter
+    def life_increases(self, tambah):
+        self.heart += tambah
         
     def is_alive(self):
         return self.heart > 0
 
 #class objek mobil musuh
-class EnemyCar(Vehicle):
+class EnemyCar(Aset):
     def __init__(self, x, y, width, height, image, speed):
         super().__init__(x, y, width, image)
         self.height = height
@@ -80,24 +90,23 @@ class Background:
         self.bg_speed = 3
 
 #class item untuk heart dan bom
-class Item(Vehicle):
-    def __init__(self, image):
-        self.x = random.randrange(70, 900)
-        self.y = -400
-        self.img_item = image
+class Item(Aset):
+    def __init__(self, x, y, width, image):
+        super().__init__(x, y, width, image)
     
     def move_down(self, game_display):
-        self.y += 1
+        self._y += 1
         self.draw(game_display)
+
     def draw(self, game_display):
-        game_display.blit(self.img_item, (self.x, self.y))
+        game_display.blit(self._image, (self._x, self._y))
 
     def get_rect(self):
-        return pygame.Rect(self.x, self.y, self.img_item.get_width(), self.img_item.get_height())
+        return pygame.Rect(self._x, self._y, self._image.get_width(), self._image.get_height())
 
     def remove(self):
-        self.y = -1200
-        self.x = random.randrange(70, 900)
+        self._y = -1200
+        self._x = random.randrange(70, 900)
 
 #class proses utama permainan
 class StreetCarRacing:
@@ -134,10 +143,10 @@ class StreetCarRacing:
         self.car = Car(self.display_width * 0.35, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
 
         # item bom yang dapat menghilangkan musuh. item ini akan muncul ketika darah user tersisa satu
-        self.item = Item(pygame.image.load(".\\img\\bom.png"))
+        self.item = Item(random.randrange(70, 900), -400, 30, pygame.image.load(".\\img\\bom.png"))
 
         # item heart yang akan muncuk ketika nyawa player kurang dari 3
-        self.item_heart = Item(pygame.image.load(".\\img\\heart.png"))
+        self.item_heart = Item(random.randrange(70, 900), -400, 30, pygame.image.load(".\\img\\heart.png"))
 
         # ledakan
         for i in range(8):
@@ -254,7 +263,7 @@ class StreetCarRacing:
                 self.enemy_car.move_down()
 
                 if self.car.get_rect().colliderect(self.enemy_car.get_rect()):
-                    self.car.lose_life()
+                    self.car.lose_life = 1
                     self.tambah_enemy_cars.remove(self.enemy_car)
                     self.crash_sound.play()
                     self.show_ledakan(self.car._x, self.car._y)
@@ -277,17 +286,17 @@ class StreetCarRacing:
             # jika nyawa player kurang dari 3 maka item heart akan muncul untuk menambah nyawa player
             if self.car.heart < 3:
                 self.item_heart.move_down(self.game_display)
-                if self.item_heart.y > 600:
+                if self.item_heart._y > 600:
                     self.item_heart.remove()
 
                 if self.item_heart.get_rect().colliderect(self.car.get_rect()):
                     self.item_heart.remove()
-                    self.car.life_increases()
+                    self.car.life_increases = 1
 
             # item bom yang akan muncul ketika darah mobil tersisa satu
             if (self.car.heart == 1):
                 self.item.move_down(self.game_display)
-                if self.item.y > 600:
+                if self.item._y > 600:
                     self.item.remove()
 
                 if self.item.get_rect().colliderect(self.car.get_rect()):
@@ -307,7 +316,7 @@ class StreetCarRacing:
                     self.car._x += 50
                 else :
                     self.car._x -= 50
-                self.car.lose_life()
+                self.car.lose_life = 1
 
                 if not self.car.is_alive():
                     self.crashed = True
