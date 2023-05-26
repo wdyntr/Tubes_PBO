@@ -16,7 +16,6 @@ class Aset(ABC):
         #
 
     #abstraksi
-    #enkapsulasi
     @abstractmethod
     def draw(self, game_display):
         pass
@@ -26,6 +25,9 @@ class Aset(ABC):
     def get_rect(self):
         pass
     #
+
+    def move(self):
+        pass
 
 #class objek mobil pemain
 class Car(Aset):
@@ -38,6 +40,15 @@ class Car(Aset):
 
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
+    
+    def move(self, event):
+        if (event.type == pygame.KEYDOWN):
+            #enkapsulasi (protected)
+            if (event.key == pygame.K_LEFT or event.key == pygame.K_a):
+                self._x -= 50
+            if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
+                self._x += 50
+            #
 
     @property
     def lose_life(self):
@@ -65,7 +76,7 @@ class EnemyCar(Aset):
         self.height = height
         self.speed = speed
 
-    def move_down(self):
+    def move(self):
         #enkapsulasi (protected)
         self._y += self.speed
         if self._y > 600:
@@ -94,7 +105,7 @@ class Item(Aset):
     def __init__(self, x, y, width, image):
         super().__init__(x, y, width, image)
     
-    def move_down(self, game_display):
+    def move(self, game_display):
         self._y += 1
         self.draw(game_display)
 
@@ -228,14 +239,8 @@ class StreetCarRacing:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.crashed = True
-                # print(event)
-                if (event.type == pygame.KEYDOWN):
-                    #enkapsulasi (protected)
-                    if (event.key == pygame.K_LEFT or event.key == pygame.K_a):
-                        self.car._x -= 50
-                    if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
-                        self.car._x += 50
-                    #
+
+                self.car.move(event)
 
             # jumlah enemy Car
             while len(self.tambah_enemy_cars) < 4:
@@ -261,7 +266,7 @@ class StreetCarRacing:
             # menampilakn enemy car ke layar
             for self.enemy_car in self.tambah_enemy_cars:
                 self.enemy_car.draw(self.game_display)
-                self.enemy_car.move_down()
+                self.enemy_car.move()
 
                 if self.car.get_rect().colliderect(self.enemy_car.get_rect()):
                     self.car.lose_life = 1
@@ -286,7 +291,7 @@ class StreetCarRacing:
 
             # jika nyawa player kurang dari 3 maka item heart akan muncul untuk menambah nyawa player
             if self.car.heart < 3:
-                self.item_heart.move_down(self.game_display)
+                self.item_heart.move(self.game_display)
                 if self.item_heart._y > 600:
                     self.item_heart.remove()
 
@@ -297,7 +302,7 @@ class StreetCarRacing:
 
             # item bom yang akan muncul ketika darah mobil tersisa satu
             if (self.car.heart == 1):
-                self.item.move_down(self.game_display)
+                self.item.move(self.game_display)
                 if self.item._y > 600:
                     self.item.remove()
 
