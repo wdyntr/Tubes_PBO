@@ -229,7 +229,7 @@ class StreetCarRacing:
                 if event.type == pygame.QUIT:
                     self.crashed = True
                 # print(event)
-                if (event.type == pygame.KEYDOWN): #?
+                if (event.type == pygame.KEYDOWN):
                     #enkapsulasi (protected)
                     if (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                         self.car._x -= 50
