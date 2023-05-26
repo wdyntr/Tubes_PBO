@@ -123,7 +123,7 @@ class StreetCarRacing:
         self.display_height = 600
         self.clock = pygame.time.Clock()
         self.tambah_enemy_cars = []
-        mixer.music.load('.\\sound\\background.wav')
+        mixer.music.load('.\\sound\\background_race.wav')
         mixer.music.play(-1)
         self.ledakan = []
         self.heart = pygame.image.load('.\\img\\heart.png')
