@@ -8,11 +8,14 @@ from button import Button
 #parent class dari class car & enemycar
 class Vehicle(ABC):
     def __init__(self, x, y, width, image):
+        #enkapsulasi (protected)
         self._x = x
         self._y = y
         self._width = width
         self._image = image
+        #
 
+    #abstraksi
     @abstractmethod
     def draw(self, game_display):
         pass
@@ -20,6 +23,7 @@ class Vehicle(ABC):
     @abstractmethod
     def get_rect(self):
         pass
+    #
 
 #class objek mobil pemain
 class Car(Vehicle):
@@ -28,7 +32,7 @@ class Car(Vehicle):
         self.heart = 3
 
     def draw(self, game_display):
-        game_display.blit(self._image, (self._x, self._y))
+        game_display.blit(self._image, (self._x, self._y)) #?
 
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self._image.get_height())
@@ -50,13 +54,15 @@ class EnemyCar(Vehicle):
         self.speed = speed
 
     def move_down(self):
+        #enkapsulasi (protected)
         self._y += self.speed
         if self._y > 600:
             self._y = 0 - self.height 
             self._x = random.randrange(70, 900)
+        #
 
     def draw(self, game_display):
-        game_display.blit(self._image, (self._x, self._y))
+        game_display.blit(self._image, (self._x, self._y)) #?
 
     def get_rect(self):
         return pygame.Rect(self._x, self._y, self._width, self.height)
@@ -79,7 +85,7 @@ class Item:
         self.img_item = image
     
     def move_down(self, game_display):
-        self.y += 3
+        self.y += 1 #item
         game_display.blit(self.img_item, (self.x, self.y))
 
     def get_Rect(self):
@@ -96,7 +102,7 @@ class StreetCarRacing:
         pygame.init()
         pygame.mixer.init()
         self.SCREEN = pygame.display.set_mode((1000, 600))
-        self.BG = pygame.image.load(".\\img\\Background.jpg") #
+        self.BG = pygame.image.load(".\\img\\Background.jpg")
         self.crash_sound = pygame.mixer.Sound('.\\sound\\explosion.wav')
         self.crash_sound.set_volume(0.5)
         self.display_width = 1000
@@ -120,7 +126,7 @@ class StreetCarRacing:
 
     def inisialisasi(self):
         self.crashed = False
-
+        #inisialisasi object car
         self.car = Car(self.display_width * 0.35, self.display_height * 0.8, 49, pygame.image.load('.\\img\\car.png'))
 
         # item bom yang dapat menghilangkan musuh. item ini akan muncul ketika darah user tersisa satu
@@ -209,25 +215,36 @@ class StreetCarRacing:
                 if event.type == pygame.QUIT:
                     self.crashed = True
                 # print(event)
-                if (event.type == pygame.KEYDOWN):
+                if (event.type == pygame.KEYDOWN): #?
+                    #enkapsulasi (protected)
                     if (event.key == pygame.K_LEFT or event.key == pygame.K_a):
                         self.car._x -= 50
                     if (event.key == pygame.K_RIGHT or event.key == pygame.K_d):
-                        self.car._x += 50 
+                        self.car._x += 50
+                    #
 
             # jumlah enemy Car
             while len(self.tambah_enemy_cars) < 4:
                 i = len(self.tambah_enemy_cars)
                 x = random.randint(70, 900)
                 y = random.randint(-600 * 2, 0)
-                if i % 2 == 0:
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 3)
-                    self.tambah_enemy_cars.append(self.enemy_car)
-                else:
-                    self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 3) 
-                    self.tambah_enemy_cars.append(self.enemy_car)
 
-            # menampilakn enemycar ke layar
+                # Periksa tumpukan dengan objek EnemyCar yang sudah ada
+                is_colliding = False
+                for enemy_car in self.tambah_enemy_cars:
+                    if abs(enemy_car._x - x) < 200 and abs(enemy_car._y - y) < 200:
+                        is_colliding = True
+                        break
+
+                if not is_colliding:
+                    if i % 2 == 0:
+                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_1.png'), 1)
+                        self.tambah_enemy_cars.append(self.enemy_car)
+                    else:
+                        self.enemy_car = EnemyCar(x, y, 49, 100, pygame.image.load('.\\img\\enemy_car_2.png'), 1) 
+                        self.tambah_enemy_cars.append(self.enemy_car)
+
+            # menampilakn enemy car ke layar
             for self.enemy_car in self.tambah_enemy_cars:
                 self.enemy_car.draw(self.game_display)
                 self.enemy_car.move_down()
@@ -273,8 +290,10 @@ class StreetCarRacing:
                     self.item.remove()
                     self.bom_sound.play()
                     for self.enemy_car in self.tambah_enemy_cars:
+                        #enkapsulasi (protected)
                         self.enemy_car._y = -600
                         self.enemy_car._x = random.randrange(70, 900)
+                        #
 
             # jika mobil keluar jalur maka nyawa player akan berkurang
             if self.car._x < 50 or self.car._x > 920: 
@@ -296,9 +315,11 @@ class StreetCarRacing:
 
     #method untuk menampilkan pesan 
     def show_message(self, msg):
+        #enkapsulasi (private)
         self.__font_mess = pygame.font.SysFont("comicsansms", 72, True)
         self.__text_mess = self.__font_mess.render(msg, True, "#b68f40")
         self.game_display.blit(self.__text_mess, (500 - self.__text_mess.get_width() // 2, 300 - self.__text_mess.get_height() // 2))
+        #
        
         pygame.display.update()
         self.clock.tick(self.FPS)
@@ -325,9 +346,11 @@ class StreetCarRacing:
 
     #method untuk menampilkan score
     def Show_score(self, count):
+        #enkapsulasi (private)
         self.__font_score = pygame.font.SysFont("lucidaconsole", 20)
         self.__text_score = self.__font_score.render("Score : " + str(count), True, "white")
         self.game_display.blit(self.__text_score, (60, 0))
+        #
 
 #baris program untuk membuat objek class utama dan menjalankan looping
 if __name__ == '__main__':
