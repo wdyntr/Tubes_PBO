@@ -311,7 +311,7 @@ class StreetCarRacing:
                     self.bom_sound.play()
                     for self.enemy_car in self.tambah_enemy_cars:
                         #enkapsulasi (protected)
-                        self.enemy_car._y = random.randrange(-600, -200)
+                        self.enemy_car._y = random.randrange(-900, -600)
                         self.enemy_car._x = random.randrange(70, 900)
                         #
 
