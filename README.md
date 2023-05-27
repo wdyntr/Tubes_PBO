@@ -1,4 +1,4 @@
-# Street Car Racing
+# Judul Proyek : Street Car Racing
 
 # Dokumentasi
 ![Screenshot_76](https://github.com/wdyntr/Tubes_PBO/assets/43138798/e04ed1fa-bb82-4ec1-91ce-dafc9d33ab4b)
@@ -10,7 +10,7 @@ Permainan ini merupakan permainan tentang seorang pengemudi yang kebut-kebutan d
 Cara memainkan game ini adalah dengan menekan tombol panah kanan (untuk ke kanan) dan kiri (untuk ke kiri) atau dapat juga menggunakan tombol a (untuk ke kiri) dan d (untuk ke kanan).
 
 # Library yang dibutuhkan
-1. Random
+1. random
 2. pygame
 3. time
 
