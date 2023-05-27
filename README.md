@@ -9,6 +9,14 @@ Permainan ini merupakan permainan tentang seorang pengemudi yang kebut-kebutan d
 # Cara Bermain
 Cara memainkan game ini adalah dengan menekan tombol panah kanan (untuk ke kanan) dan kiri (untuk ke kiri) atau dapat juga menggunakan tombol a (untuk ke kiri) dan d (untuk ke kanan).
 
+# Library yang dibutuhkan
+1. Random
+2. pygame
+3. time
+
+# UML CLass Diagram
+![UML CLass Diagram](img/class_diagram.png)
+
 # Kontributor
 | Nama | NIM | Posisi | GitHub |
 |------|-----|--------|--------|
